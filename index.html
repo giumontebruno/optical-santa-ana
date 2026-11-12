@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optical Santa Ana | Alta Óptica, Probador Virtual 3D & E-commerce</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Three.js for 3D Viewers -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f6f7f9',
+              100: '#eceff3',
+              500: '#1e3a5f',
+              600: '#142742',
+              900: '#0b1626',
+              gold: '#c5a059',
+              goldLight: '#e4c88e'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-gold {
+      background: linear-gradient(135deg, #c5a059 0%, #e8d09e 50%, #b88f44 100%);
+    }
+    .text-gradient-gold {
+      background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa771c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(229, 231, 235, 0.8);
+    }
+    .dark .glass-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-[#faf9f6] text-slate-900 font-sans antialiased selection:bg-brand-gold selection:text-white">
+
+  <!-- Top Announcement Bar -->
+  <header class="bg-brand-900 text-slate-200 text-xs py-2 px-4 border-b border-white/10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5 text-brand-goldLight">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+          Casa Central: Ruta 1 (frente a Luisito) | Sucursal: Ruta 2 (frente a Centro Tava)
+        </span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-goldLight"></i>
+          Agendamiento Oculista disponible hoy
+        </span>
+        <a href="https://wa.me/595976105480?text=Hola%20Optical%20Santa%20Ana,%20quiero%20agendar%20una%20consulta" target="_blank" class="text-brand-goldLight hover:underline font-semibold flex items-center gap-1">
+          <i data-lucide="message-circle" class="w-3 h-3"></i> WhatsApp Directo
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 glass-card border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Brand Logo -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-brand-900 flex items-center justify-center text-brand-gold shadow-md">
+            <i data-lucide="glasses" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-2xl font-serif font-bold tracking-tight text-brand-900 block leading-none">OPTICAL</span>
+            <span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Santa Ana</span>
+          </div>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-700">
+          <a href="#catalogo" class="hover:text-brand-gold transition-colors">Colección de Marcos</a>
+          <a href="#vto-section" class="flex items-center gap-1.5 text-brand-900 font-semibold bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 hover:bg-amber-100 transition-colors">
+            <i data-lucide="sparkles" class="w-4 h-4 text-brand-gold"></i>
+            Probador Virtual con IA
+          </a>
+          <a href="#configurador" class="hover:text-brand-gold transition-colors">Lentes Recetados</a>
+          <a href="#sucursales" class="hover:text-brand-gold transition-colors">Nuestros 2 Locales</a>
+          <a href="#oculista" class="hover:text-brand-gold transition-colors">Agendar Oculista</a>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="flex items-center space-x-4">
+          <button onclick="openCartModal()" class="relative p-2.5 rounded-full hover:bg-slate-100 transition-colors text-slate-700">
+            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+            <span id="cartCountBadge" class="absolute top-1 right-1 w-4 h-4 bg-brand-gold text-white text-[10px] font-bold rounded-full flex items-center justify-center">1</span>
+          </button>
+          <a href="#configurador" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-900 text-white hover:bg-brand-600 transition-all text-sm font-semibold shadow-sm">
+            <i data-lucide="upload" class="w-4 h-4 text-brand-gold"></i>
+            Pedir con Receta
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#f2efe9] to-[#faf9f6] py-16 lg:py-24 border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Hero Text -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/70 border border-amber-300 text-xs font-semibold text-amber-900">
+            <i data-lucide="award" class="w-4 h-4 text-brand-gold"></i>
+            Excelencia Óptica en Paraguay | Casa Central & Sucursal 2
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-slate-900 tracking-tight leading-[1.15]">
+            Ver bien, sentirte bien, <span class="italic text-brand-gold">verte increíble.</span>
+          </h1>
+          <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
+            Descubrí los mejores armazones de autor, cristales con filtro azul y multifocales de precisión. Probátelos en 3D en vivo desde tu celular antes de comprar.
+          </p>
+
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#vto-section" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-brand-900 text-white font-semibold text-sm hover:bg-brand-600 shadow-lg shadow-brand-900/15 transition-all">
+              <i data-lucide="camera" class="w-4 h-4 text-brand-goldLight"></i>
+              Probar Marcos en mi Rostro (IA)
+            </a>
+            <a href="#catalogo" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-800 font-semibold text-sm hover:bg-slate-50 transition-all">
+              <i data-lucide="eye" class="w-4 h-4 text-slate-500"></i>
+              Ver Catálogo 3D
+            </a>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80 text-xs text-slate-600">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+              </div>
+              <span>Garantía en cristales y armazones</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700">
+                <i data-lucide="truck" class="w-4 h-4"></i>
+              </div>
+              <span>Envíos a todo el país o retiro en local</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700">
+                <i data-lucide="file-check" class="w-4 h-4"></i>
+              </div>
+              <span>Factura Legal Electrónica (DNIT/SIFEN)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Interactive Hero Preview Card -->
+        <div class="lg:col-span-6">
+          <div class="glass-card rounded-3xl p-6 shadow-2xl relative border border-white/60">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-brand-gold">Renderizado 3D Interactivo</span>
+                <h3 class="text-lg font-serif font-bold text-slate-900" id="heroModelTitle">Milano Vintage Edition</h3>
+              </div>
+              <div class="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full text-xs font-medium text-slate-600">
+                <i data-lucide="rotate-3d" class="w-3.5 h-3.5 text-brand-gold"></i>
+                <span id="rotationStatus">360° Activo (Arrastrá para girar)</span>
+              </div>
+            </div>
+
+            <!-- Canvas 3D Area -->
+            <div class="relative w-full h-[320px] bg-gradient-to-b from-stone-100 to-stone-50 rounded-2xl overflow-hidden flex items-center justify-center cursor-grab active:cursor-grabbing border border-stone-200 shadow-inner" id="canvas3dContainer">
+              <!-- Three.js Canvas mounts here -->
+              <canvas id="threeCanvas" class="w-full h-full block"></canvas>
+              
+              <!-- Floating Controls Overlay -->
+              <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center bg-white/80 backdrop-blur-md px-4 py-2 rounded-xl text-xs border border-white/70">
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-500">Material:</span>
+                  <div class="flex items-center gap-1.5" id="colorSelectors">
+                    <button onclick="changeFrameColor('gold')" class="w-5 h-5 rounded-full bg-amber-400 border-2 border-white ring-2 ring-amber-400/50" title="Oro Pulido"></button>
+                    <button onclick="changeFrameColor('black')" class="w-5 h-5 rounded-full bg-slate-900 border-2 border-white hover:ring-2 hover:ring-slate-400" title="Negro Mate"></button>
+                    <button onclick="changeFrameColor('tortoise')" class="w-5 h-5 rounded-full bg-amber-800 border-2 border-white hover:ring-2 hover:ring-amber-700" title="Carey Vintage"></button>
+                    <button onclick="changeFrameColor('silver')" class="w-5 h-5 rounded-full bg-slate-300 border-2 border-white hover:ring-2 hover:ring-slate-300" title="Plata Titanio"></button>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 font-semibold text-slate-800">
+                  <span>Gs. 385.000</span>
+                  <button onclick="addCurrentToCart()" class="px-3 py-1 bg-brand-900 text-white rounded-lg text-xs hover:bg-brand-600 flex items-center gap-1">
+                    <i data-lucide="plus" class="w-3 h-3"></i> Elegir
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between text-xs text-slate-500">
+              <span class="flex items-center gap-1"><i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i> Modelo 3D generado a partir de fotos con IA</span>
+              <span class="text-emerald-700 font-medium">✓ Disponible en las 2 sucursales</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Virtual Try-On (VTO) Showcase Section -->
+  <section id="vto-section" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+    <!-- Ambient light effects -->
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold/20 text-brand-goldLight text-xs font-semibold mb-3 border border-brand-gold/30">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          Tecnología de Visión Artificial & Realidad Aumentada
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-serif font-bold tracking-tight">
+          Probador Virtual: Mirate con los marcos antes de decidir
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base mt-3">
+          ¿No podés ir hasta el local ahora mismo? Usá la cámara de tu celular o subí una foto tuya. La IA ajusta el marco al tamaño real de tu rostro.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- VTO Screen Preview / Simulator -->
+        <div class="lg:col-span-7 bg-slate-800/90 rounded-3xl p-5 border border-slate-700 shadow-2xl relative">
+          <!-- Top bar of simulator -->
+          <div class="flex justify-between items-center pb-4 mb-4 border-b border-slate-700 text-xs">
+            <div class="flex items-center gap-2 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="vtoModeLabel">Modo: Detección Facial Activa</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="toggleVtoMode('camera')" id="btnVtoCamera" class="px-3 py-1 rounded-lg bg-brand-gold text-slate-900 font-bold transition-all flex items-center gap-1.5 text-xs">
+                <i data-lucide="video" class="w-3.5 h-3.5"></i> Cámara en Vivo
+              </button>
+              <button onclick="toggleVtoMode('photo')" id="btnVtoPhoto" class="px-3 py-1 rounded-lg bg-slate-700 text-slate-300 hover:text-white transition-all flex items-center gap-1.5 text-xs">
+                <i data-lucide="image" class="w-3.5 h-3.5"></i> Subir Selfie
+              </button>
+            </div>
+          </div>
+
+          <!-- Video / Photo Container -->
+          <div class="relative w-full h-[380px] bg-slate-950 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-700/60" id="vtoViewport">
+            <!-- Simulated Face with Dynamic Glasses Overlay -->
+            <div id="vtoDisplayArea" class="relative w-full h-full flex items-center justify-center">
+              <img id="vtoUserFace" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Rostro de prueba" class="w-full h-full object-cover opacity-90 transition-all duration-300">
+              
+              <!-- Dynamic Frame Overlay Graphic on Face -->
+              <div id="vtoGlassesOverlay" class="absolute pointer-events-none transition-all duration-200" style="top: 36%; width: 280px;">
+                <svg id="vtoGlassesSvg" viewBox="0 0 320 90" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full drop-shadow-2xl">
+                  <!-- Bridge -->
+                  <path d="M135 32 Q160 22 185 32" stroke="#c5a059" stroke-width="6" stroke-linecap="round" id="vtoBridge"/>
+                  <!-- Left Rim -->
+                  <rect x="25" y="10" width="110" height="70" rx="35" stroke="#c5a059" stroke-width="6" fill="rgba(255,255,255,0.15)" id="vtoRimLeft"/>
+                  <!-- Right Rim -->
+                  <rect x="185" y="10" width="110" height="70" rx="35" stroke="#c5a059" stroke-width="6" fill="rgba(255,255,255,0.15)" id="vtoRimRight"/>
+                  <!-- Hinges -->
+                  <path d="M10 25 L25 25" stroke="#c5a059" stroke-width="6" stroke-linecap="round" id="vtoHingeLeft"/>
+                  <path d="M295 25 L310 25" stroke="#c5a059" stroke-width="6" stroke-linecap="round" id="vtoHingeRight"/>
+                </svg>
+              </div>
+
+              <!-- Face Alignment Landmark Guides -->
+              <div id="vtoGuides" class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
+                <div class="border border-dashed border-brand-gold w-64 h-80 rounded-full flex items-center justify-center">
+                  <div class="w-full border-t border-brand-gold/40"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload input (hidden) -->
+            <input type="file" id="selfieUploadInput" accept="image/*" class="hidden" onchange="handleSelfieUpload(event)">
+          </div>
+
+          <!-- Bottom Adjusters -->
+          <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block mb-1">Ajuste de Escala:</span>
+              <input type="range" min="200" max="340" value="280" class="w-full accent-brand-gold" oninput="adjustFrameScale(this.value)">
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block mb-1">Posición Vertical:</span>
+              <input type="range" min="25" max="50" value="36" class="w-full accent-brand-gold" oninput="adjustFramePos(this.value)">
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700">
+              <span class="text-slate-400 block mb-1">Color del Marco:</span>
+              <div class="flex items-center gap-2 mt-1">
+                <button onclick="setVtoColor('#c5a059')" class="w-4 h-4 rounded-full bg-[#c5a059]" title="Oro"></button>
+                <button onclick="setVtoColor('#111827')" class="w-4 h-4 rounded-full bg-slate-900 border border-slate-600" title="Negro"></button>
+                <button onclick="setVtoColor('#78350f')" class="w-4 h-4 rounded-full bg-amber-900" title="Carey"></button>
+                <button onclick="setVtoColor('#94a3b8')" class="w-4 h-4 rounded-full bg-slate-400" title="Plata"></button>
+              </div>
+            </div>
+            <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-700 flex items-center justify-center">
+              <button onclick="triggerSelfieUpload()" class="w-full py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center justify-center gap-1">
+                <i data-lucide="upload" class="w-3.5 h-3.5 text-brand-gold"></i> Subir mi Foto
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- VTO Frame Selector Column -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-serif font-bold text-white">Elegí el marco a probarte:</h3>
+            <span class="text-xs text-brand-gold">4 Modelos disponibles</span>
+          </div>
+
+          <!-- List of selectable frames -->
+          <div class="space-y-2.5" id="vtoListContainer">
+            <!-- Item 1 -->
+            <div onclick="selectVtoFrame('milano', 'Milano Gold Octagon', 385000, '#c5a059', 'octagon')" class="p-3.5 rounded-2xl bg-slate-800 border-2 border-brand-gold hover:bg-slate-750 transition-all cursor-pointer flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-brand-gold">
+                  <i data-lucide="glasses" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Milano Gold Edition</h4>
+                  <p class="text-xs text-slate-400">Metal liviano • Forma Octagonal moderna</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold text-brand-goldLight">Gs. 385.000</span>
+                <span class="block text-[10px] text-emerald-400">✓ En ambas sucursales</span>
+              </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div onclick="selectVtoFrame('classic', 'Classic Black Aviator', 420000, '#111827', 'aviator')" class="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700 hover:border-slate-500 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-slate-300">
+                  <i data-lucide="glasses" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Classic Black Aviator</h4>
+                  <p class="text-xs text-slate-400">Acero inoxidable • Lente amplio</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold text-slate-200">Gs. 420.000</span>
+                <span class="block text-[10px] text-emerald-400">✓ En ambas sucursales</span>
+              </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div onclick="selectVtoFrame('carey', 'Roma Tortoise Acetate', 360000, '#78350f', 'round')" class="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700 hover:border-slate-500 hover:bg-slate-800 transition-all cursor-pointer flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-amber-700">
+                  <i data-lucide="glasses" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Roma Tortoise Acetate</h4>
+                  <p class="text-xs text-slate-400">Acetato italiano • Redondo vintage</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-sm font-bold text-slate-200">Gs. 360.000</span>
+                <span class="block text-[10px] text-emerald-400">✓ Casa Central Ruta 1</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 text-xs text-slate-300">
+            <p class="flex items-start gap-2">
+              <i data-lucide="info" class="w-4 h-4 text-brand-gold mt-0.5 shrink-0"></i>
+              <span>¿Te gustó cómo te queda? Hacé clic en <strong>"Configurar Cristales con Receta"</strong> para agregar tu graduación o pedir solo el armazón.</span>
+            </p>
+          </div>
+
+          <button onclick="scrollToConfigurator()" class="w-full py-3.5 rounded-xl bg-brand-gold hover:bg-brand-goldLight text-slate-900 font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4"></i> Continuar con este Marco
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Prescription Configurator Step-by-Step -->
+  <section id="configurador" class="py-20 bg-white border-b border-stone-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold">Paso a Paso Inteligente</span>
+        <h2 class="text-3xl font-serif font-bold text-slate-900 mt-1">Configurador de Cristales & Receta</h2>
+        <p class="text-slate-600 text-sm mt-2">
+          Te guiamos de forma simple. Podés subir una foto de tu receta médica o cargar los aumentos a mano.
+        </p>
+      </div>
+
+      <div class="bg-stone-50 rounded-3xl p-6 sm:p-10 border border-stone-200 shadow-xl">
+        <!-- Step Indicators -->
+        <div class="grid grid-cols-4 gap-2 mb-8 text-xs font-semibold text-center border-b pb-6">
+          <div class="text-brand-900 flex flex-col items-center gap-1">
+            <span class="w-7 h-7 rounded-full bg-brand-900 text-white flex items-center justify-center">1</span>
+            <span>Uso del Lente</span>
+          </div>
+          <div class="text-brand-900 flex flex-col items-center gap-1">
+            <span class="w-7 h-7 rounded-full bg-brand-900 text-white flex items-center justify-center">2</span>
+            <span>Tu Receta</span>
+          </div>
+          <div class="text-brand-900 flex flex-col items-center gap-1">
+            <span class="w-7 h-7 rounded-full bg-brand-900 text-white flex items-center justify-center">3</span>
+            <span>Tratamientos</span>
+          </div>
+          <div class="text-slate-400 flex flex-col items-center gap-1">
+            <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center">4</span>
+            <span>Resumen</span>
+          </div>
+        </div>
+
+        <!-- Section 1: Usage Type -->
+        <div class="mb-10">
+          <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-gold"></span> 1. ¿Para qué vas a usar tus lentes?
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+            <label class="relative p-4 rounded-2xl bg-white border-2 border-brand-900 cursor-pointer shadow-sm hover:border-brand-gold transition-all block">
+              <input type="radio" name="lens_use" value="monofocal" checked class="absolute top-4 right-4 accent-brand-gold">
+              <i data-lucide="eye" class="w-6 h-6 text-brand-900 mb-2"></i>
+              <h4 class="font-bold text-sm text-slate-900">Visión Monofocal</h4>
+              <p class="text-xs text-slate-500 mt-1">Para ver de lejos (manejar/calle) o lectura de cerca.</p>
+              <span class="inline-block mt-3 text-xs font-semibold text-brand-900 bg-slate-100 px-2 py-1 rounded">Incluido base</span>
+            </label>
+
+            <label class="relative p-4 rounded-2xl bg-white border border-slate-200 cursor-pointer hover:border-brand-gold transition-all block">
+              <input type="radio" name="lens_use" value="multifocal" class="absolute top-4 right-4 accent-brand-gold">
+              <i data-lucide="layers" class="w-6 h-6 text-brand-gold mb-2"></i>
+              <h4 class="font-bold text-sm text-slate-900">Multifocal / Progresivo</h4>
+              <p class="text-xs text-slate-500 mt-1">Visión nítida continua: cerca, intermedia (computadora) y lejos.</p>
+              <span class="inline-block mt-3 text-xs font-semibold text-brand-gold bg-amber-50 px-2 py-1 rounded">+ Gs. 320.000</span>
+            </label>
+
+            <label class="relative p-4 rounded-2xl bg-white border border-slate-200 cursor-pointer hover:border-brand-gold transition-all block">
+              <input type="radio" name="lens_use" value="descanso" class="absolute top-4 right-4 accent-brand-gold">
+              <i data-lucide="monitor" class="w-6 h-6 text-blue-600 mb-2"></i>
+              <h4 class="font-bold text-sm text-slate-900">Descanso / Sin Aumento</h4>
+              <p class="text-xs text-slate-500 mt-1">Solo filtro de luz azul para celular, tablet y PC. Sin receta.</p>
+              <span class="inline-block mt-3 text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded">+ Gs. 140.000</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section 2: Prescription Mode Toggle -->
+        <div class="mb-10">
+          <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-gold"></span> 2. ¿Cómo querés ingresar tu graduación?
+          </h3>
+          <div class="flex gap-4 mb-6">
+            <button type="button" onclick="setRxMethod('upload')" id="btnRxUpload" class="px-5 py-2.5 rounded-xl bg-brand-900 text-white font-semibold text-xs flex items-center gap-2 shadow-sm">
+              <i data-lucide="upload-cloud" class="w-4 h-4"></i> Subir Foto de la Receta (Recomendado)
+            </button>
+            <button type="button" onclick="setRxMethod('manual')" id="btnRxManual" class="px-5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-xs flex items-center gap-2 hover:bg-slate-50">
+              <i data-lucide="edit-3" class="w-4 h-4"></i> Ingresar Valores a Mano (OD / OI)
+            </button>
+          </div>
+
+          <!-- Method 1: Photo Upload Box -->
+          <div id="rxUploadBox" class="p-8 border-2 border-dashed border-slate-300 rounded-2xl bg-white text-center hover:border-brand-gold transition-colors">
+            <i data-lucide="file-image" class="w-10 h-10 text-brand-gold mx-auto mb-2"></i>
+            <h4 class="text-sm font-bold text-slate-800">Arrastrá aquí la foto de tu receta o hacé clic para subir</h4>
+            <p class="text-xs text-slate-500 mt-1">Acepta fotos tomadas con el celular (.JPG, .PNG o .PDF)</p>
+            <input type="file" id="rxFileInput" class="hidden" onchange="previewRxFileName(this)">
+            <button type="button" onclick="document.getElementById('rxFileInput').click()" class="mt-4 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg">
+              Seleccionar Archivo
+            </button>
+            <p id="rxSelectedFile" class="text-xs text-emerald-600 font-semibold mt-2 hidden"></p>
+            <p class="text-[11px] text-slate-400 mt-3 italic">Nuestro equipo óptico validará la graduación con vos por WhatsApp antes de cortar los cristales en taller.</p>
+          </div>
+
+          <!-- Method 2: Manual Numbers Grid (Hidden by default) -->
+          <div id="rxManualBox" class="hidden bg-white p-6 rounded-2xl border border-slate-200">
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left">
+                <thead>
+                  <tr class="border-b text-slate-500 uppercase tracking-wider font-semibold">
+                    <th class="py-2">Ojo</th>
+                    <th class="py-2">Esfera (SPH)</th>
+                    <th class="py-2">Cilindro (CYL)</th>
+                    <th class="py-2">Eje (AXIS)</th>
+                    <th class="py-2">Adición (ADD)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="py-3 font-bold text-slate-900">Ojo Derecho (OD)</td>
+                    <td><input type="text" placeholder="-1.50" class="w-20 p-2 border rounded-lg text-xs"></td>
+                    <td><input type="text" placeholder="-0.50" class="w-20 p-2 border rounded-lg text-xs"></td>
+                    <td><input type="text" placeholder="180°" class="w-20 p-2 border rounded-lg text-xs"></td>
+                    <td><input type="text" placeholder="+1.00" class="w-20 p-2 border rounded-lg text-xs"></td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 font-bold text-slate-900">Ojo Izquierdo (OI)</td>
+                    <td><input type="text" placeholder="-1.25" class="w-20 p-2 border rounded-lg text-xs"></td>
+                    <td><input type="text" placeholder="-0.75" class="w-20 p-2 border rounded-lg text-xs"></td>
+                    <td><input type="text" placeholder="90°" class="w-20 p-2 border rounded-lg text-xs"></td>
+                    <td><input type="text" placeholder="+1.00" class="w-20 p-2 border rounded-lg text-xs"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 flex items-center gap-4 text-xs">
+              <label class="font-semibold text-slate-700">Distancia Interpupilar (DIP):</label>
+              <input type="text" placeholder="Ej. 62 mm" class="w-28 p-2 border rounded-lg text-xs">
+              <span class="text-slate-400 italic">(Si no la sabés, la medimos gratis con una foto de frente)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Lens Coatings / Treatments -->
+        <div class="mb-8">
+          <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-gold"></span> 3. Filtros y Tratamientos Especiales
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <label class="p-4 rounded-2xl bg-white border border-slate-200 cursor-pointer hover:border-brand-gold transition-all block">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs text-slate-900">Blue Light Block</span>
+                <input type="checkbox" checked class="accent-brand-gold">
+              </div>
+              <p class="text-[11px] text-slate-500 mt-2">Protege contra la fatiga visual de pantallas digitales y celulares.</p>
+              <span class="block mt-2 text-xs font-semibold text-brand-gold">+ Gs. 90.000</span>
+            </label>
+
+            <label class="p-4 rounded-2xl bg-white border border-slate-200 cursor-pointer hover:border-brand-gold transition-all block">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs text-slate-900">Antirreflejo HD Verde</span>
+                <input type="checkbox" checked class="accent-brand-gold">
+              </div>
+              <p class="text-[11px] text-slate-500 mt-2">Elimina reflejos molestos para manejar de noche y videollamadas.</p>
+              <span class="block mt-2 text-xs font-semibold text-brand-gold">+ Gs. 60.000</span>
+            </label>
+
+            <label class="p-4 rounded-2xl bg-white border border-slate-200 cursor-pointer hover:border-brand-gold transition-all block">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs text-slate-900">Fotocromático (Transitions)</span>
+                <input type="checkbox" class="accent-brand-gold">
+              </div>
+              <p class="text-[11px] text-slate-500 mt-2">Se oscurecen automáticamente bajo el sol y quedan transparentes adentro.</p>
+              <span class="block mt-2 text-xs font-semibold text-brand-gold">+ Gs. 180.000</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Section 4: Total & Add to Cart -->
+        <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div>
+            <span class="text-xs text-slate-500 uppercase font-bold tracking-wider">Total Estimado (Armazón + Cristales):</span>
+            <div class="text-2xl font-serif font-bold text-slate-900">Gs. 535.000</div>
+            <span class="text-xs text-emerald-600 font-semibold">✓ Incluye calibrado en laboratorio óptico</span>
+          </div>
+
+          <button onclick="openCartModal()" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-brand-900 hover:bg-brand-600 text-white font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2">
+            <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-gold"></i>
+            Agregar al Carrito de Pedido
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Physical Branches / Las 2 Sucursales -->
+  <section id="sucursales" class="py-20 bg-stone-100 border-b border-stone-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-gold">Presencia Física</span>
+        <h2 class="text-3xl font-serif font-bold text-slate-900 mt-1">Nuestros 2 Locales</h2>
+        <p class="text-slate-600 text-sm mt-2">
+          Podés retirar tus compras online en cualquiera de nuestras sucursales o visitarnos para tu examen de la vista.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Sucursal 1 -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-md hover:shadow-xl transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold">CASA CENTRAL</span>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Abierto Hoy
+            </span>
+          </div>
+          <h3 class="text-xl font-serif font-bold text-slate-900">Casa Central - Ruta 1</h3>
+          <p class="text-sm text-slate-600 mt-2 flex items-start gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-brand-gold mt-0.5 shrink-0"></i>
+            <span>Ruta PY01 (Frente al Hipermercado Luisito)</span>
+          </p>
+          <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+            <p class="flex items-center gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-slate-400"></i> Lunes a Viernes: 08:00 a 18:30 | Sábados: 08:00 a 13:00
+            </p>
+            <p class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4 text-slate-400"></i> WhatsApp: (0976) 105 480
+            </p>
+          </div>
+          <div class="mt-6 flex gap-3">
+            <a href="https://wa.me/595976105480?text=Hola,%20quisiera%20consultar%20sobre%20Casa%20Central" target="_blank" class="flex-1 py-2.5 bg-brand-900 hover:bg-brand-600 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Contactar Casa Central
+            </a>
+          </div>
+        </div>
+
+        <!-- Sucursal 2 -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-md hover:shadow-xl transition-all">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-900 text-xs font-bold">SUCURSAL 2</span>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Abierto Hoy
+            </span>
+          </div>
+          <h3 class="text-xl font-serif font-bold text-slate-900">Sucursal - Ruta 2</h3>
+          <p class="text-sm text-slate-600 mt-2 flex items-start gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-brand-gold mt-0.5 shrink-0"></i>
+            <span>Ruta PY02 (Frente al Centro Médico Tava)</span>
+          </p>
+          <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+            <p class="flex items-center gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-slate-400"></i> Lunes a Viernes: 08:00 a 18:30 | Sábados: 08:00 a 13:00
+            </p>
+            <p class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-4 h-4 text-slate-400"></i> WhatsApp: (0976) 895 750
+            </p>
+          </div>
+          <div class="mt-6 flex gap-3">
+            <a href="https://wa.me/595976895750?text=Hola,%20quisiera%20consultar%20sobre%20Sucursal%20Ruta%202" target="_blank" class="flex-1 py-2.5 bg-brand-900 hover:bg-brand-600 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-2">
+              <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Contactar Sucursal 2
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agendamiento Oculista Section -->
+  <section id="oculista" class="py-16 bg-white border-b border-stone-200">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <div class="w-14 h-14 rounded-full bg-amber-50 text-brand-gold mx-auto flex items-center justify-center mb-4">
+        <i data-lucide="stethoscope" class="w-7 h-7"></i>
+      </div>
+      <h2 class="text-3xl font-serif font-bold text-slate-900">¿Necesitás renovar tu receta?</h2>
+      <p class="text-slate-600 text-sm mt-2 max-w-lg mx-auto">
+        Contamos con servicio de refracción y atención con profesionales oftalmólogos en ambas sucursales. Agendá tu turno online.
+      </p>
+      <div class="mt-6 flex flex-wrap justify-center gap-4">
+        <a href="https://wa.me/595976105480?text=Hola,%20quiero%20agendar%20turno%20de%20oculista%20en%20Casa%20Central" target="_blank" class="px-6 py-3 bg-brand-900 hover:bg-brand-600 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+          <i data-lucide="calendar" class="w-4 h-4 text-brand-gold"></i> Agendar en Casa Central (Ruta 1)
+        </a>
+        <a href="https://wa.me/595976895750?text=Hola,%20quiero%20agendar%20turno%20de%20oculista%20en%20Sucursal%20Ruta%202" target="_blank" class="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+          <i data-lucide="calendar" class="w-4 h-4 text-brand-gold"></i> Agendar en Sucursal (Ruta 2)
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-900 text-slate-300 py-12 border-t border-white/10 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="glasses" class="w-5 h-5 text-brand-gold"></i>
+          <span class="font-serif font-bold text-white text-base">OPTICAL SANTA ANA</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          Excelencia y calidad para tu salud visual. Atención personalizada y la mayor variedad de marcos y cristales en Paraguay.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-bold text-white mb-3 uppercase tracking-wider text-[11px] text-brand-gold">Navegación</h4>
+        <ul class="space-y-2">
+          <li><a href="#catalogo" class="hover:text-white">Colección de Marcos</a></li>
+          <li><a href="#vto-section" class="hover:text-white">Probador Virtual 3D</a></li>
+          <li><a href="#configurador" class="hover:text-white">Lentes con Receta</a></li>
+          <li><a href="#sucursales" class="hover:text-white">Sucursales & Horarios</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold text-white mb-3 uppercase tracking-wider text-[11px] text-brand-gold">Medios de Pago Paraguay</h4>
+        <div class="space-y-2 text-slate-400">
+          <p>✓ Pagopar (Tarjetas & Billeteras)</p>
+          <p>✓ Bancard vPOS (Crédito, Débito, QR)</p>
+          <p>✓ Apple Pay & Google Wallet</p>
+          <p>✓ Transferencias SIPAP</p>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-bold text-white mb-3 uppercase tracking-wider text-[11px] text-brand-gold">Facturación Legal</h4>
+        <p class="text-slate-400 leading-relaxed mb-3">
+          Emisión de comprobante electrónico (SIFEN / e-Kuatia) con previa confirmación de tu receta oftalmológica.
+        </p>
+        <span class="inline-block px-2.5 py-1 rounded bg-slate-800 text-[10px] text-slate-300 border border-slate-700">
+          RUC Registrado en DNIT Paraguay
+        </span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 pt-6 border-t border-white/10 text-center text-slate-500">
+      <p>© 2026 Optical Santa Ana. Todos los derechos reservados. Desarrollado con tecnología 3D & Visión Artificial.</p>
+    </div>
+  </footer>
+
+  <!-- Modal: Shopping Cart & Checkout with Pagopar / Bancard -->
+  <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200">
+      <button onclick="closeCartModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4 pb-3 border-b">
+        <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-gold"></i>
+        <h3 class="text-lg font-serif font-bold text-slate-900">Tu Pedido en Óptica Santa Ana</h3>
+      </div>
+
+      <!-- Item in Cart -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-white border flex items-center justify-center text-brand-gold">
+              <i data-lucide="glasses" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-xs text-slate-900">Milano Gold + Cristales Blue Block</h4>
+              <p class="text-[11px] text-slate-500">Receta adjunta • Casa Central</p>
+            </div>
+          </div>
+          <span class="text-xs font-bold text-slate-900">Gs. 535.000</span>
+        </div>
+      </div>
+
+      <!-- Select Delivery or Pick up Branch -->
+      <div class="mt-4 space-y-2">
+        <label class="block text-xs font-bold text-slate-700">Entrega o Retiro:</label>
+        <select class="w-full p-2.5 text-xs border rounded-xl bg-white">
+          <option>Retiro en Casa Central (Ruta 1 frente a Luisito) - Gratis</option>
+          <option>Retiro en Sucursal (Ruta 2 frente a Centro Tava) - Gratis</option>
+          <option>Envío por delivery / encomienda a todo Paraguay (+ Gs. 25.000)</option>
+        </select>
+      </div>
+
+      <!-- Payment Gateways Simulation -->
+      <div class="mt-4 pt-4 border-t space-y-3">
+        <label class="block text-xs font-bold text-slate-700">Elegí tu medio de pago:</label>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button class="p-3 border rounded-xl bg-slate-50 hover:border-brand-gold text-left font-semibold text-slate-800 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span> Bancard vPOS
+          </button>
+          <button class="p-3 border rounded-xl bg-slate-50 hover:border-brand-gold text-left font-semibold text-slate-800 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span> Pagopar
+          </button>
+          <button class="p-3 border rounded-xl bg-slate-50 hover:border-brand-gold text-left font-semibold text-slate-800 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> QR / SIPAP
+          </button>
+          <button class="p-3 border rounded-xl bg-slate-50 hover:border-brand-gold text-left font-semibold text-slate-800 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-slate-900"></span> Apple / Google Pay
+          </button>
+        </div>
+      </div>
+
+      <!-- Notice regarding electronic invoice approval -->
+      <div class="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 flex items-start gap-2">
+        <i data-lucide="check-shield" class="w-4 h-4 text-brand-gold mt-0.5 shrink-0"></i>
+        <span>Una vez pagado, la factura electrónica se emitirá previa validación de tus datos y graduación por el laboratorio óptico.</span>
+      </div>
+
+      <button onclick="confirmOrder()" class="mt-5 w-full py-3.5 bg-brand-900 hover:bg-brand-600 text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2">
+        <i data-lucide="lock" class="w-4 h-4 text-brand-gold"></i> Pagar Gs. 535.000 con Aprobación
+      </button>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic: 3D Scene + VTO Controls + UI Handlers -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // -----------------------------------------------------------------
+    // 1. THREE.JS 3D CANVAS FOR EYEWEAR ROTATION (360 TURNTABLE)
+    // -----------------------------------------------------------------
+    let scene, camera, renderer, glassesGroup;
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    let currentFrameColor = 0xc5a059; // Gold default
+
+    function initThree3D() {
+      const container = document.getElementById('canvas3dContainer');
+      const canvas = document.getElementById('threeCanvas');
+      
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf6f5f1);
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      camera.position.set(0, 0, 7);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+
+      // Lights
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+      scene.add(ambientLight);
+
+      const dirLight1 = new THREE.DirectionalLight(0xfffaed, 1.2);
+      dirLight1.position.set(5, 8, 5);
+      scene.add(dirLight1);
+
+      const dirLight2 = new THREE.DirectionalLight(0xdce7ff, 0.8);
+      dirLight2.position.set(-5, -3, -3);
+      scene.add(dirLight2);
+
+      // Create 3D Eyewear Geometric Model
+      create3DGlassesModel(currentFrameColor);
+
+      // Mouse / Touch Interaction for 360 Rotation
+      container.addEventListener('mousedown', onPointerDown);
+      window.addEventListener('mouseup', onPointerUp);
+      container.addEventListener('mousemove', onPointerMove);
+
+      container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      });
+      window.addEventListener('touchend', () => isDragging = false);
+      container.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - previousMousePosition.x;
+        const deltaY = e.touches[0].clientY - previousMousePosition.y;
+        if (glassesGroup) {
+          glassesGroup.rotation.y += deltaX * 0.01;
+          glassesGroup.rotation.x += deltaY * 0.01;
+        }
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      });
+
+      // Handle Resize
+      window.addEventListener('resize', onWindowResize);
+
+      // Animation Loop
+      animateThree();
+    }
+
+    function create3DGlassesModel(colorHex) {
+      if (glassesGroup) scene.remove(glassesGroup);
+
+      glassesGroup = new THREE.Group();
+
+      const frameMaterial = new THREE.MeshStandardMaterial({
+        color: colorHex,
+        metalness: colorHex === 0xc5a059 || colorHex === 0xd1d5db ? 0.85 : 0.2,
+        roughness: 0.25,
+        clearcoat: 0.3
+      });
+
+      const lensMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x94b8d7,
+        transmission: 0.88,
+        opacity: 1,
+        transparent: true,
+        roughness: 0.1,
+        ior: 1.5,
+        reflectivity: 0.9
+      });
+
+      // Left Frame Rim (Torus geometry)
+      const rimGeo = new THREE.TorusGeometry(0.9, 0.07, 16, 50);
+      const leftRim = new THREE.Mesh(rimGeo, frameMaterial);
+      leftRim.position.set(-1.15, 0, 0);
+      glassesGroup.add(leftRim);
+
+      // Left Lens (Cylinder)
+      const lensGeo = new THREE.CylinderGeometry(0.85, 0.85, 0.04, 32);
+      lensGeo.rotateX(Math.PI / 2);
+      const leftLens = new THREE.Mesh(lensGeo, lensMaterial);
+      leftLens.position.set(-1.15, 0, 0);
+      glassesGroup.add(leftLens);
+
+      // Right Frame Rim
+      const rightRim = new THREE.Mesh(rimGeo, frameMaterial);
+      rightRim.position.set(1.15, 0, 0);
+      glassesGroup.add(rightRim);
+
+      // Right Lens
+      const rightLens = new THREE.Mesh(lensGeo, lensMaterial);
+      rightLens.position.set(1.15, 0, 0);
+      glassesGroup.add(rightLens);
+
+      // Center Bridge (Curve)
+      const bridgeCurve = new THREE.CubicBezierCurve3(
+        new THREE.Vector3(-0.35, 0.15, 0),
+        new THREE.Vector3(-0.15, 0.45, 0.05),
+        new THREE.Vector3(0.15, 0.45, 0.05),
+        new THREE.Vector3(0.35, 0.15, 0)
+      );
+      const bridgeGeo = new THREE.TubeGeometry(bridgeCurve, 20, 0.05, 8, false);
+      const bridge = new THREE.Mesh(bridgeGeo, frameMaterial);
+      glassesGroup.add(bridge);
+
+      // Left Temple / Arm
+      const armGeo = new THREE.CylinderGeometry(0.04, 0.03, 2.5, 12);
+      armGeo.rotateX(Math.PI / 2);
+      const leftArm = new THREE.Mesh(armGeo, frameMaterial);
+      leftArm.position.set(-2.05, 0.1, -1.25);
+      leftArm.rotation.y = 0.05;
+      glassesGroup.add(leftArm);
+
+      // Right Temple / Arm
+      const rightArm = new THREE.Mesh(armGeo, frameMaterial);
+      rightArm.position.set(2.05, 0.1, -1.25);
+      rightArm.rotation.y = -0.05;
+      glassesGroup.add(rightArm);
+
+      scene.add(glassesGroup);
+    }
+
+    function onPointerDown(e) {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+
+    function onPointerUp() {
+      isDragging = false;
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging || !glassesGroup) return;
+      const deltaX = e.clientX - previousMousePosition.x;
+      const deltaY = e.clientY - previousMousePosition.y;
+
+      glassesGroup.rotation.y += deltaX * 0.01;
+      glassesGroup.rotation.x += deltaY * 0.01;
+
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('canvas3dContainer');
+      if (!container || !renderer || !camera) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function animateThree() {
+      requestAnimationFrame(animateThree);
+      // Gentle auto-rotation when user is not dragging
+      if (!isDragging && glassesGroup) {
+        glassesGroup.rotation.y += 0.005;
+      }
+      renderer.render(scene, camera);
+    }
+
+    function changeFrameColor(colorName) {
+      let hex = 0xc5a059;
+      if (colorName === 'black') hex = 0x111827;
+      if (colorName === 'tortoise') hex = 0x78350f;
+      if (colorName === 'silver') hex = 0xd1d5db;
+      currentFrameColor = hex;
+      create3DGlassesModel(hex);
+    }
+
+    // -----------------------------------------------------------------
+    // 2. VIRTUAL TRY-ON (VTO) LOGIC
+    // -----------------------------------------------------------------
+    function adjustFrameScale(val) {
+      const overlay = document.getElementById('vtoGlassesOverlay');
+      if (overlay) overlay.style.width = val + 'px';
+    }
+
+    function adjustFramePos(val) {
+      const overlay = document.getElementById('vtoGlassesOverlay');
+      if (overlay) overlay.style.top = val + '%';
+    }
+
+    function setVtoColor(colorHex) {
+      const elements = ['vtoBridge', 'vtoRimLeft', 'vtoRimRight', 'vtoHingeLeft', 'vtoHingeRight'];
+      elements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('stroke', colorHex);
+      });
+    }
+
+    function selectVtoFrame(key, name, price, colorHex, shape) {
+      setVtoColor(colorHex);
+      document.getElementById('heroModelTitle').innerText = name;
+      changeFrameColor(colorHex === '#c5a059' ? 'gold' : colorHex === '#111827' ? 'black' : colorHex === '#78350f' ? 'tortoise' : 'silver');
+    }
+
+    function toggleVtoMode(mode) {
+      const btnCam = document.getElementById('btnVtoCamera');
+      const btnPhoto = document.getElementById('btnVtoPhoto');
+      const label = document.getElementById('vtoModeLabel');
+
+      if (mode === 'camera') {
+        btnCam.className = "px-3 py-1 rounded-lg bg-brand-gold text-slate-900 font-bold transition-all flex items-center gap-1.5 text-xs";
+        btnPhoto.className = "px-3 py-1 rounded-lg bg-slate-700 text-slate-300 hover:text-white transition-all flex items-center gap-1.5 text-xs";
+        label.innerText = "Modo: Cámara en Vivo (AR Facial)";
+        // Try web camera
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+              const displayArea = document.getElementById('vtoDisplayArea');
+              let video = document.getElementById('vtoVideoEl');
+              if (!video) {
+                video = document.createElement('video');
+                video.id = 'vtoVideoEl';
+                video.autoplay = true;
+                video.playsInline = true;
+                video.className = "w-full h-full object-cover";
+                displayArea.prepend(video);
+              }
+              video.srcObject = stream;
+              document.getElementById('vtoUserFace').classList.add('hidden');
+            })
+            .catch(err => {
+              alert("Para la prueba en vivo podés permitir el acceso a tu cámara o subir una foto tuya.");
+            });
+        }
+      } else {
+        btnPhoto.className = "px-3 py-1 rounded-lg bg-brand-gold text-slate-900 font-bold transition-all flex items-center gap-1.5 text-xs";
+        btnCam.className = "px-3 py-1 rounded-lg bg-slate-700 text-slate-300 hover:text-white transition-all flex items-center gap-1.5 text-xs";
+        label.innerText = "Modo: Foto / Selfie Subida";
+        triggerSelfieUpload();
+      }
+    }
+
+    function triggerSelfieUpload() {
+      document.getElementById('selfieUploadInput').click();
+    }
+
+    function handleSelfieUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const img = document.getElementById('vtoUserFace');
+          img.src = evt.target.result;
+          img.classList.remove('hidden');
+          const video = document.getElementById('vtoVideoEl');
+          if (video && video.srcObject) {
+            video.srcObject.getTracks().forEach(track => track.stop());
+            video.remove();
+          }
+          document.getElementById('vtoModeLabel').innerText = "Selfie cargada: " + file.name;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // 3. PRESCRIPTION & CART MODAL LOGIC
+    // -----------------------------------------------------------------
+    function setRxMethod(method) {
+      const uploadBox = document.getElementById('rxUploadBox');
+      const manualBox = document.getElementById('rxManualBox');
+      const btnUpload = document.getElementById('btnRxUpload');
+      const btnManual = document.getElementById('btnRxManual');
+
+      if (method === 'upload') {
+        uploadBox.classList.remove('hidden');
+        manualBox.classList.add('hidden');
+        btnUpload.className = "px-5 py-2.5 rounded-xl bg-brand-900 text-white font-semibold text-xs flex items-center gap-2 shadow-sm";
+        btnManual.className = "px-5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-xs flex items-center gap-2 hover:bg-slate-50";
+      } else {
+        uploadBox.classList.add('hidden');
+        manualBox.classList.remove('hidden');
+        btnManual.className = "px-5 py-2.5 rounded-xl bg-brand-900 text-white font-semibold text-xs flex items-center gap-2 shadow-sm";
+        btnUpload.className = "px-5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-xs flex items-center gap-2 hover:bg-slate-50";
+      }
+    }
+
+    function previewRxFileName(input) {
+      const label = document.getElementById('rxSelectedFile');
+      if (input.files && input.files[0]) {
+        label.innerText = "✓ Receta adjunta: " + input.files[0].name;
+        label.classList.remove('hidden');
+      }
+    }
+
+    function scrollToConfigurator() {
+      document.getElementById('configurador').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openCartModal() {
+      document.getElementById('cartModal').classList.remove('hidden');
+    }
+
+    function closeCartModal() {
+      document.getElementById('cartModal').classList.add('hidden');
+    }
+
+    function confirmOrder() {
+      alert("¡Excelente! La pasarela procesa el pago de forma segura y la orden se envía a taller óptico con previa revisión de tu receta. Te llegará el enlace de seguimiento a tu WhatsApp.");
+      closeCartModal();
+    }
+
+    function addCurrentToCart() {
+      openCartModal();
+    }
+
+    // Initialize Three.js once DOM is loaded
+    window.addEventListener('DOMContentLoaded', () => {
+      initThree3D();
+    });
+  </script>
+</body>
+</html>
